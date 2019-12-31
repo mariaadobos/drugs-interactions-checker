@@ -9,7 +9,7 @@ Mis objetivos personales con este proyecto son:
 
 ## Objetivo del proyecto
 
-Una aplicación web, dirigida a público en general, que permita detectar posibles interacciones farmacológicas entre medicamentos de venta libre y/o usados para el tratamiento de enfermedades crónicas etc.
+Una aplicación web, dirigida a público en general, que permita detectar posibles interacciones farmacológicas entre medicamentos de venta libre y/o usados para el tratamiento de enfermedades crónicas etc, disponibles en el mercado español.
 
 * Quiero una interfaz de usuario que me muestre como mínimo dos campos para introducir los nombres de fármacos.
 * Quiero un botón que permita conectarse a las APIs para buscar la información sobre medicamentos.
