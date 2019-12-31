@@ -7,7 +7,7 @@
 * recoger los datos introducidos por el usuario
 * a través de la API de CIMA convertir los nombres comerciales a principios activos correspondientes
 * realizar la búsqueda de interracciones entre los principios activos usando la API de DrugBank/Drugle/Vidal
-* pintar el resultado de búsqueda
+* pintar el resultado de la búsqueda
 
 ### Requisitos técnicos
 
