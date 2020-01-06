@@ -2,3 +2,21 @@
 @import 'core/mixins';
 @import 'core/variables';
 @import 'vendors/normalize';
+
+#root{
+    background-color: rgb(243, 214, 176);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.input{
+    margin: 10px 0;
+}
