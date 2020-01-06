@@ -1,6 +1,7 @@
 import React from 'react';
 import '../stylesheets/App.scss';
 
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -11,8 +12,16 @@ class App extends React.Component {
     }
     this.onSubmitHandler = this.onSubmitHandler.bind(this);
     this.getInputValue = this.getInputValue.bind(this);
-    //this.onClickHandler = this.onClickHandler.bind(this);
+    this.onClickHandler = this.onClickHandler.bind(this);
+    this.fetchCIMA = this.fetchCIMA.bind(this);
   }
+  fetchCIMA = () => {
+    const ENDPOINT = `https://cima.aemps.es/cima/rest/medicamentos?nombre=${this.state.drug1}`;
+    fetch(ENDPOINT)
+  .then(response => response.json())
+  .then(data => console.log(data.resultados[0].vtm.nombre))
+  }
+
   onSubmitHandler = event => {
     event.preventDefault();
   }
@@ -24,7 +33,9 @@ class App extends React.Component {
     })
     console.log(this.state.drug1)
     console.log(this.state.drug2)
-
+  }
+  onClickHandler = event => {
+    this.fetchCIMA()
   }
   render() {
     return (
