@@ -1,4 +1,5 @@
 import React from 'react';
+import Suggestions from './Suggestions';
 import '../stylesheets/App.scss';
 
 
@@ -9,7 +10,7 @@ class App extends React.Component {
       drug1: '',
       drug2: '',
       result: '',
-      suggestion: []
+      suggestions: []
     }
     this.onSubmitHandler = this.onSubmitHandler.bind(this);
     this.getInputValue = this.getInputValue.bind(this);
@@ -31,7 +32,7 @@ class App extends React.Component {
     }
     console.log(suggestionArray)
     this.setState({
-      suggestion: suggestionArray
+      suggestions: suggestionArray
     })
   }
   onSubmitHandler = event => {
@@ -62,6 +63,9 @@ class App extends React.Component {
             name='drug1'
             value={this.state.drug1}
             onChange={this.getInputValue}
+            />
+            <Suggestions
+            suggestions = {this.state.suggestions}
             />
             <input
             className='input'

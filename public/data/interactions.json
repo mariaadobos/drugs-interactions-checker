@@ -1,0 +1,23 @@
+{
+    "interactions": [
+      {
+        "ingredient": {
+          "name": "Sevoflurane"
+        },
+        "affected_ingredient": {
+          "name": "Ephedra sinica root"
+        },
+        "description": "Sevoflurane may increase the arrhythmogenic activities of Ephedra sinica root.",
+        "extended_description": "The use of ephedra is currently either banned or strongly recommended against as being unsafe in many countries [L3650, L3651, F648]...",
+        "action": "increase_specific_effects",
+        "severity": "major",
+        "references": {
+          "external_links": [
+            {
+              "url": "https://www.medicines.org.uk/emc/product/3593/smpc"
+            }
+          ]
+        }
+      }
+    ]
+  }
