@@ -139,6 +139,96 @@
       },
 
       {
+        "ingredient": "dexclorfeniramina",
+        "affected_ingredient": [
+            {
+              "name": "ebastina",
+              "description": "El efecto sedante se verá potenciado: puede aparecer somnolencia o mareo.",
+              "severity": "Moderado. Considerar la modificación del tratamiento.",
+              "references": {
+                "external_links": [
+                    {
+                      "url": "https://www.vademecum.es/medicamento-polaramine_3186"
+                    }
+                ]
+              }
+            }
+        ]
+      },
+
+      {
+        "ingredient": "dexketoprofeno",
+        "affected_ingredient": [
+            {
+              "name": "ácido acetilsalicílico",
+              "description": "Aumenta el riesgo de úlceras y hemorragias gastrointestinales.",
+              "severity": "Moderado. Considerar la modificación del tratamiento.",
+              "references": {
+                "external_links": [
+                  {
+                    "url": "https://www.vademecum.es/medicamento-enantyum_ficha_43539"
+                  }
+                ]
+              }
+            },
+            {
+                "name": "enalapril",
+                "description": "El efecto hipotensor de enalapril se verá reducido.",
+                "severity": "Moderado. Considerar la modificación del tratamiento.",
+                "references": {
+                  "external_links": [
+                    {
+                      "url": "https://www.vademecum.es/medicamento-enantyum_ficha_43539"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "furosemida",
+                "description": "El efecto diurético de furosemida se verá reducido.",
+                "severity": "Moderado. Considerar la modificación del tratamiento.",
+                "references": {
+                  "external_links": [
+                    {
+                      "url": "https://www.vademecum.es/medicamento-enantyum_ficha_43539"
+                    }
+                  ]
+                }
+              },
+            {
+                "name": "ibuprofeno",
+                "description": "Aumenta el riesgo de úlceras y hemorragias gastrointestinales.",
+                "severity": "Moderado. Considerar la modificación del tratamiento.",
+                "references": {
+                  "external_links": [
+                    {
+                      "url": "https://www.vademecum.es/medicamento-enantyum_ficha_43539"
+                    }
+                  ]
+                }
+              }
+        ]
+      },
+
+      {
+        "ingredient": "ebastina",
+        "affected_ingredient": [
+            {
+              "name": "dexclorfeniramina",
+              "description": "El efecto sedante se verá potenciado: puede aparecer somnolencia o mareo.",
+              "severity": "Moderado. Considerar la modificación del tratamiento.",
+              "references": {
+                "external_links": [
+                    {
+                      "url": "https://www.vademecum.es/medicamento-ebastina%20normon_30864"
+                    }
+                ]
+              }
+            }
+        ]
+      },
+
+      {
         "ingredient": "enalapril",
         "affected_ingredient": [
             {
@@ -223,6 +313,24 @@
       },
 
       {
+        "ingredient": "levotiroxina",
+        "affected_ingredient": [
+            {
+              "name": "metformina",
+              "description": "La eficacia de antidiabéticos se verá reducida.",
+              "severity": "Moderado. Considerar la modificación del tratamiento.",
+              "references": {
+                "external_links": [
+                  {
+                    "url": "https://www.drugs.com/drug-interactions/levothyroxine-with-metformin-1463-0-1573-0.html"
+                  }
+                ]
+              }
+            }
+        ]
+      },
+
+      {
         "ingredient": "metamizol",
         "affected_ingredient": [
             {
@@ -237,60 +345,6 @@
                 ]
               }
             }
-        ]
-      },
-
-      {
-        "ingredient": "dexketoprofeno",
-        "affected_ingredient": [
-            {
-              "name": "ácido acetilsalicílico",
-              "description": "Aumenta el riesgo de úlceras y hemorragias gastrointestinales.",
-              "severity": "Moderado. Considerar la modificación del tratamiento.",
-              "references": {
-                "external_links": [
-                  {
-                    "url": "https://www.vademecum.es/medicamento-enantyum_ficha_43539"
-                  }
-                ]
-              }
-            },
-            {
-                "name": "enalapril",
-                "description": "El efecto hipotensor de enalapril se verá reducido.",
-                "severity": "Moderado. Considerar la modificación del tratamiento.",
-                "references": {
-                  "external_links": [
-                    {
-                      "url": "https://www.vademecum.es/medicamento-enantyum_ficha_43539"
-                    }
-                  ]
-                }
-              },
-              {
-                "name": "furosemida",
-                "description": "El efecto diurético de furosemida se verá reducido.",
-                "severity": "Moderado. Considerar la modificación del tratamiento.",
-                "references": {
-                  "external_links": [
-                    {
-                      "url": "https://www.vademecum.es/medicamento-enantyum_ficha_43539"
-                    }
-                  ]
-                }
-              },
-            {
-                "name": "ibuprofeno",
-                "description": "Aumenta el riesgo de úlceras y hemorragias gastrointestinales.",
-                "severity": "Moderado. Considerar la modificación del tratamiento.",
-                "references": {
-                  "external_links": [
-                    {
-                      "url": "https://www.vademecum.es/medicamento-enantyum_ficha_43539"
-                    }
-                  ]
-                }
-              }
         ]
       }
 

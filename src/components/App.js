@@ -1,11 +1,14 @@
 import React from 'react';
 import '../stylesheets/App.scss';
-//import {fetchCIMA, fetchDataBase} from '../services/fetch'
+import Result from './Result'
+import {fetchCIMA, fetchDataBase} from '../services/fetch'
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      query1: '',
+      query2: '',
       drug1: '',
       drug2: '',
       result: ''
@@ -13,17 +16,37 @@ class App extends React.Component {
     this.onSubmitHandler = this.onSubmitHandler.bind(this);
     this.getInputValue = this.getInputValue.bind(this);
     this.onClickHandler = this.onClickHandler.bind(this);
-    this.fetchCIMA = this.fetchCIMA.bind(this);
-  }
-  fetchCIMA = () => {
-    const ENDPOINT = `https://cima.aemps.es/cima/rest/medicamentos?nombre=${this.state.drug1}`;
-    fetch(ENDPOINT)
-  .then(response => response.json())
-  .then(data => console.log(data.resultados[0].vtm.nombre))
+    this.getValue = this.getValue.bind(this)
+    this.fetchDataBase = this.fetchDataBase.bind(this)
   }
 
+  fetchDataBase(){
+    fetchDataBase()
+    .then(data => this.getInfo(data.interactions))
+  } 
+  getInfo(interactions){
+    for (const item of interactions){
+      if (this.state.drug1===item.ingredient){
+        const selectedElement = item
+        const ingredients = selectedElement.affected_ingredient
+        for (const elem of ingredients){
+          if (this.state.drug2===elem.name){
+            this.setState({
+              result: elem.severity
+            })
+          } else {
+            this.setState({
+              result: 'noni'
+            })
+          }
+        }
+      }
+    }
+  }
   onSubmitHandler = event => {
     event.preventDefault();
+    this.fetchDataBase()
+
   }
   getInputValue = event => {
     let name = event.target.name;
@@ -31,11 +54,30 @@ class App extends React.Component {
     this.setState({
       [name]: value
     })
-    console.log(this.state.drug1)
-    console.log(this.state.drug2)
+    this.getValue(name)
+  }
+  getValue(name){
+    if (this.state.query1 || name==='query1'){
+      fetchCIMA(this.state.query1)
+      .then(data => {
+        this.setState({
+          drug1: data.resultados[0].vtm.nombre
+        })
+      })
+      }
+      if (this.state.query2 || name==='query2'){
+        fetchCIMA(this.state.query2)
+        .then(data => {
+          this.setState({
+            drug2: data.resultados[0].vtm.nombre
+          })
+        }) 
+      }
   }
   onClickHandler = event => {
-    this.fetchCIMA()
+    console.log(this.state.drug1)
+    console.log(this.state.drug2)
+    this.fetchDataBase()
   }
   render() {
     return (
@@ -47,15 +89,15 @@ class App extends React.Component {
             <input
             className='input'
             type='text'
-            name='drug1'
-            value={this.state.drug1}
+            name='query1'
+            value={this.state.query1}
             onChange={this.getInputValue}
             />
             <input
             className='input'
             type='text'
-            name='drug2'
-            value={this.state.drug2}
+            name='query2'
+            value={this.state.query2}
             onChange={this.getInputValue}
             />
             <button
@@ -64,9 +106,7 @@ class App extends React.Component {
               Comparar
             </button>
           </form>
-          <section>
-            <p>{this.state.result}</p>
-          </section>
+          {this.state.result ? <Result result={this.state.result}/> : null}
         </main>
         <footer></footer>
       </React.Fragment>
