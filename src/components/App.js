@@ -1,6 +1,6 @@
 import React from 'react';
 import '../stylesheets/App.scss';
-
+//import {fetchCIMA, fetchDataBase} from '../services/fetch'
 
 class App extends React.Component {
   constructor(props) {
