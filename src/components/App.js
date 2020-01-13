@@ -1,7 +1,7 @@
 import React from 'react';
 import '../stylesheets/App.scss';
 import Result from './Result'
-import {fetchCIMA, fetchDataBase} from '../services/fetch'
+import {fetchCIMA} from '../services/fetch'
 
 class App extends React.Component {
   constructor(props) {
@@ -16,18 +16,21 @@ class App extends React.Component {
     this.onSubmitHandler = this.onSubmitHandler.bind(this);
     this.getInputValue = this.getInputValue.bind(this);
     this.onClickHandler = this.onClickHandler.bind(this);
-    this.getValue = this.getValue.bind(this)
+    //this.getValue = this.getValue.bind(this)
     this.fetchDataBase = this.fetchDataBase.bind(this)
   }
 
-  fetchDataBase(){
-    fetchDataBase()
-    .then(data => this.getInfo(data.interactions))
+  fetchDataBase = async() => {
+    const response = await fetch('./data/interactions.json')
+    const json = await response.json();
+    this.getInfo(json.interactions)
   } 
   getInfo(interactions){
     for (const item of interactions){
       if (this.state.drug1===item.ingredient){
         const selectedElement = item
+        console.log(selectedElement)
+//la culpa es de bucleeeeee haz indexof
         const ingredients = selectedElement.affected_ingredient
         for (const elem of ingredients){
           if (this.state.drug2===elem.name){
@@ -36,7 +39,7 @@ class App extends React.Component {
             })
           } else {
             this.setState({
-              result: 'noni'
+              result: 'no hay info'
             })
           }
         }
@@ -48,36 +51,34 @@ class App extends React.Component {
     this.fetchDataBase()
 
   }
-  getInputValue = event => {
+  async getInputValue (event) {
     let name = event.target.name;
     let value = event.target.value;
     this.setState({
       [name]: value
     })
-    this.getValue(name)
+    const drug1 = await fetchCIMA(this.state.query1)
+    const drug2 = await fetchCIMA(this.state.query2)
+    //console.log(drug1)
+    //console.log(drug2)
+    this.setState({
+      drug1: drug1.resultados[0].vtm.nombre,
+      drug2: drug2.resultados[0].vtm.nombre,
+
+    })
+    console.log(this.state.drug1)
+    console.log(this.state.drug2)
+
   }
-  getValue(name){
-    if (this.state.query1 || name==='query1'){
-      fetchCIMA(this.state.query1)
-      .then(data => {
-        this.setState({
-          drug1: data.resultados[0].vtm.nombre
-        })
-      })
-      }
-      if (this.state.query2 || name==='query2'){
-        fetchCIMA(this.state.query2)
-        .then(data => {
-          this.setState({
-            drug2: data.resultados[0].vtm.nombre
-          })
-        }) 
-      }
+  fetchCIMA(id){
+    fetchCIMA(id)
+    .then(data => {
+      return data.resultados[0].vtm.nombre
+    })
   }
   onClickHandler = event => {
     console.log(this.state.drug1)
     console.log(this.state.drug2)
-    this.fetchDataBase()
   }
   render() {
     return (
