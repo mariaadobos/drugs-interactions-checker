@@ -30,13 +30,13 @@ class App extends React.Component {
       if (this.state.drug1===item.ingredient){
         const selectedElement = item
         console.log(selectedElement)
-//la culpa es de bucleeeeee haz indexof
         const ingredients = selectedElement.affected_ingredient
         for (const elem of ingredients){
           if (this.state.drug2===elem.name){
             this.setState({
               result: elem.severity
             })
+            break;
           } else {
             this.setState({
               result: 'no hay info'
@@ -107,7 +107,7 @@ class App extends React.Component {
               Comparar
             </button>
           </form>
-          {this.state.result ? <Result result={this.state.result}/> : null}
+          {this.state.result ? <Result result={this.state.result}/> : <div>cargando...</div>}
         </main>
         <footer></footer>
       </React.Fragment>
