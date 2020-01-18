@@ -4,19 +4,94 @@
 @import 'vendors/normalize';
 
 #root{
-    background-color: rgb(243, 214, 176);
+    background-color: #eddfcd;
     height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
+.main{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 .form{
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
+.label{
+    font-size: 26px;
+    font-weight: bold;
+    margin: 15px 0;
+    color: #853e34;
+    text-align: center;
+}
 .input{
-    margin: 10px 0;
+    min-width: 250px;
+    width: 20%;
+    height: 40px;
+    border-radius: 20px;
+    border: 2px solid #d9baa4;
+    background-color: #d9baa4;
+    margin: 15px 0;
+    font-size: 22px;
+    padding: 20px;
+}
+.btn{
+    margin: 20px 0;
+    background-color: #e96925;
+    color: white;
+    min-width: 100px;
+    min-height: 50px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 20px;
+    &:hover{
+        transform: scale(1.05);
+    }
+}
+.result-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 15px;
+    &__message{
+        font-size: 18px;
+        color: #853e34;
+        text-align: center;
+        @media all and (min-width: 768px){
+            font-size: 20px;
+        }
+    }
+    &__txt{
+        font-size: 22px;
+        @media all and (min-width: 768px){
+            font-size: 24px;
+        }
+    }
+    &__btn{
+        background-color: #853e34;
+        color: white;        
+        border-radius: 5px;
+        width: 130px;
+        height: 30px;
+        &:hover{
+            transform: scale(1.05);
+        }
+    }
+    &__details{
+        font-size: 18px;
+        @media all and (min-width: 768px){
+            width: 50%;
+            font-size: 22px;
+        }
+    }
+}
+.hidden{
+    display: none;
 }

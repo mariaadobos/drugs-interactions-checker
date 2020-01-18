@@ -11,12 +11,15 @@ class App extends React.Component {
       query2: '',
       drug1: '',
       drug2: '',
-      result: ''
+      result: '',
+      details: '',
+      detailsAreHidden: true
     }
     this.onSubmitHandler = this.onSubmitHandler.bind(this);
     this.getInputValue = this.getInputValue.bind(this);
     this.onClickHandler = this.onClickHandler.bind(this);
-    this.fetchDataBase = this.fetchDataBase.bind(this)
+    this.fetchDataBase = this.fetchDataBase.bind(this);
+    this.showDetails = this.showDetails.bind(this);
   }
 
   fetchDataBase = async() => {
@@ -33,12 +36,14 @@ class App extends React.Component {
         for (const elem of ingredients){
           if (this.state.drug2===elem.name){
             this.setState({
-              result: elem.severity
+              result: elem.severity,
+              details: elem.description
             })
             break;
           } else {
             this.setState({
-              result: 'no hay info'
+              result: 'no hay info',
+              details: 'no hay info'
             })
           }
         }
@@ -79,13 +84,20 @@ class App extends React.Component {
     console.log(this.state.drug1)
     console.log(this.state.drug2)
   }
+  showDetails () {
+    this.setState(prevState => {
+      return {
+        detailsAreHidden: !prevState.detailsAreHidden
+      }
+    })
+  }
   render() {
     return (
       <React.Fragment>
         <header></header>
         <main className='main'>
           <form className='form' onSubmit={this.onSubmitHandler}>
-            <label>Introduzca los nombres de los medicamentos</label>
+            <label className='label'>Introduzca los nombres de los medicamentos</label>
             <input
             className='input'
             type='text'
@@ -101,12 +113,20 @@ class App extends React.Component {
             onChange={this.getInputValue}
             />
             <button
+            className='btn'
             type='submit'
             onClick={this.onClickHandler}>
-              Comparar
+              Buscar
             </button>
           </form>
-          {this.state.result ? <Result result={this.state.result}/> : <div>cargando...</div>}
+          {this.state.result ? 
+          <Result result={this.state.result}
+          drug1={this.state.drug1}
+          drug2={this.state.drug2}
+          details={this.state.details}
+          showDetails={this.showDetails}
+          detailsAreHidden={this.state.detailsAreHidden}
+          /> : null}
         </main>
         <footer></footer>
       </React.Fragment>
