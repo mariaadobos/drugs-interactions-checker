@@ -16,7 +16,6 @@ class App extends React.Component {
     this.onSubmitHandler = this.onSubmitHandler.bind(this);
     this.getInputValue = this.getInputValue.bind(this);
     this.onClickHandler = this.onClickHandler.bind(this);
-    //this.getValue = this.getValue.bind(this)
     this.fetchDataBase = this.fetchDataBase.bind(this)
   }
 
