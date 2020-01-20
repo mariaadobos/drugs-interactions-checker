@@ -17,7 +17,6 @@ class App extends React.Component {
     }
     this.onSubmitHandler = this.onSubmitHandler.bind(this);
     this.getInputValue = this.getInputValue.bind(this);
-    this.onClickHandler = this.onClickHandler.bind(this);
     this.fetchDataBase = this.fetchDataBase.bind(this);
     this.showDetails = this.showDetails.bind(this);
   }
@@ -63,16 +62,21 @@ class App extends React.Component {
     })
     const drug1 = await fetchCIMA(this.state.query1)
     const drug2 = await fetchCIMA(this.state.query2)
-    //console.log(drug1)
-    //console.log(drug2)
-    this.setState({
-      drug1: drug1.resultados[0].vtm.nombre,
-      drug2: drug2.resultados[0].vtm.nombre,
-
-    })
-    console.log(this.state.drug1)
-    console.log(this.state.drug2)
-
+    
+    if (!drug1.resultados[0] || !drug2.resultados[0]){
+      this.setState({
+        drug1: '',
+        drug2: '',
+        result: '',
+        details: ''
+      })
+    } else {
+      this.setState({
+        drug1: drug1.resultados[0].vtm.nombre,
+        drug2: drug2.resultados[0].vtm.nombre
+      })
+    }
+      
   }
   fetchCIMA(id){
     fetchCIMA(id)
@@ -80,10 +84,7 @@ class App extends React.Component {
       return data.resultados[0].vtm.nombre
     })
   }
-  onClickHandler = event => {
-    console.log(this.state.drug1)
-    console.log(this.state.drug2)
-  }
+  
   showDetails () {
     this.setState(prevState => {
       return {
@@ -114,8 +115,7 @@ class App extends React.Component {
             />
             <button
             className='btn'
-            type='submit'
-            onClick={this.onClickHandler}>
+            type='submit'>
               Buscar
             </button>
           </form>
