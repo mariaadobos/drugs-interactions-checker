@@ -18,3 +18,4 @@ Por ahora las aplicaciónes que ofrecen contenido similar suelen centarse en enf
 
 ## Fases del proyecto
 * [Fase 1](https://github.com/mariaadobos/personal-project/blob/master/FASE-1.md)
+* [Fase 2](https://github.com/mariaadobos/personal-project/blob/master/FASE-2.md)
