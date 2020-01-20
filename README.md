@@ -3,7 +3,7 @@
 ## Objetivos personales
 
 Mis objetivos personales con este proyecto son:
-* Mejorar mis conocimientos de JavaScript
+* Mejorar mis conocimientos de JavaScript y React
     * Realización de llamadas a dos APIs.
     * Realizar una interfaz de usuario dinámica.
 
