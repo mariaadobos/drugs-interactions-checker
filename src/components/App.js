@@ -60,23 +60,36 @@ class App extends React.Component {
     this.setState({
       [name]: value
     })
-    const drug1 = await fetchCIMA(this.state.query1)
-    const drug2 = await fetchCIMA(this.state.query2)
-    
-    if (!drug1.resultados[0] || !drug2.resultados[0]){
+    if (name==='query1'){
+      const drug1 = await fetchCIMA(this.state.query1)
+      if (this.checkResults(drug1)){
+      this.setState({
+        drug1: drug1.resultados[0].vtm.nombre
+      })
+    }
+    }
+    if (name==='query2'){
+      const drug2 = await fetchCIMA(this.state.query2)
+      if (this.checkResults(drug2)){
+      this.setState({
+        drug2: drug2.resultados[0].vtm.nombre
+      })
+    }
+    }
+  }
+  checkResults(res){
+    console.log(res)
+    if (!res.resultados[0]){
       this.setState({
         drug1: '',
         drug2: '',
         result: '',
         details: ''
       })
-    } else {
-      this.setState({
-        drug1: drug1.resultados[0].vtm.nombre,
-        drug2: drug2.resultados[0].vtm.nombre
-      })
+      return false;
+    }else{
+      return true
     }
-      
   }
   fetchCIMA(id){
     fetchCIMA(id)
@@ -93,6 +106,9 @@ class App extends React.Component {
     })
   }
   render() {
+    console.log(this.state.drug1);
+    console.log(this.state.drug2);
+
     return (
       <React.Fragment>
         <header></header>
