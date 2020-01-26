@@ -19,8 +19,9 @@ class App extends React.Component {
     this.getInputValue = this.getInputValue.bind(this);
     this.fetchDataBase = this.fetchDataBase.bind(this);
     this.showDetails = this.showDetails.bind(this);
+    this.getFirstComponent = this.debounce(this.getFirstComponent, 500)
+    this.getSecondComponent = this.debounce(this.getSecondComponent, 500)
   }
-
   fetchDataBase = async() => {
     const response = await fetch('./data/interactions.json')
     const json = await response.json();
@@ -30,7 +31,6 @@ class App extends React.Component {
     for (const item of interactions){
       if (this.state.drug1===item.ingredient){
         const selectedElement = item
-        console.log(selectedElement)
         const ingredients = selectedElement.affected_ingredient
         for (const elem of ingredients){
           if (this.state.drug2===elem.name){
@@ -52,7 +52,6 @@ class App extends React.Component {
   onSubmitHandler = event => {
     event.preventDefault();
     this.fetchDataBase()
-
   }
   async getInputValue (event) {
     let name = event.target.name;
@@ -60,23 +59,54 @@ class App extends React.Component {
     this.setState({
       [name]: value
     })
+    if (name==='query1'){
+      this.getFirstComponent()
+    }
+    if (name==='query2'){
+      this.getSecondComponent()
+    }
+  }
+   async getFirstComponent () {
     const drug1 = await fetchCIMA(this.state.query1)
+      if (this.checkResults(drug1)){
+      this.setState({
+        drug1: drug1.resultados[0].vtm.nombre
+      })
+    }
+  }
+  async getSecondComponent () {
     const drug2 = await fetchCIMA(this.state.query2)
-    
-    if (!drug1.resultados[0] || !drug2.resultados[0]){
+      if (this.checkResults(drug2)){
+      this.setState({
+        drug2: drug2.resultados[0].vtm.nombre
+      })
+    }
+  }
+  debounce (fn, time){
+    let timeOutId
+    return function(){
+      if(timeOutId){
+        clearTimeout(timeOutId)
+      }
+      const context = this
+      const args = arguments
+      timeOutId = setTimeout(() => {
+        fn.apply(context, args)
+      }, time)
+    }
+  }
+  checkResults(res){
+    if (!res.resultados[0]){
       this.setState({
         drug1: '',
         drug2: '',
         result: '',
         details: ''
       })
+      return false;
     } else {
-      this.setState({
-        drug1: drug1.resultados[0].vtm.nombre,
-        drug2: drug2.resultados[0].vtm.nombre
-      })
+      return true
     }
-      
   }
   fetchCIMA(id){
     fetchCIMA(id)
@@ -84,7 +114,6 @@ class App extends React.Component {
       return data.resultados[0].vtm.nombre
     })
   }
-  
   showDetails () {
     this.setState(prevState => {
       return {
@@ -93,6 +122,8 @@ class App extends React.Component {
     })
   }
   render() {
+    console.log(this.state.drug1);
+    console.log(this.state.drug2);
     return (
       <React.Fragment>
         <header></header>
