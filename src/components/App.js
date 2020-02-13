@@ -1,84 +1,177 @@
 import React from 'react';
 import '../stylesheets/App.scss';
-
+import Result from './Result';
+import Autocomplete from './Autocomplete';
+import {fetchCIMA} from '../services/fetch'
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      query1: '',
+      query2: '',
       drug1: '',
       drug2: '',
       result: '',
-      suggestion: []
+      suggestionsDrug1: [],
+      suggestionsDrug2: [],
+      details: '',
+      detailsAreHidden: true
     }
     this.onSubmitHandler = this.onSubmitHandler.bind(this);
     this.getInputValue = this.getInputValue.bind(this);
-    this.onClickHandler = this.onClickHandler.bind(this);
-    this.fetchCIMA = this.fetchCIMA.bind(this);
-    this.getData = this.getData.bind(this);
+    this.fetchDataBase = this.fetchDataBase.bind(this);
+    this.showDetails = this.showDetails.bind(this);
+    this.getFirstComponent = this.debounce(this.getFirstComponent, 500)
+    this.getSecondComponent = this.debounce(this.getSecondComponent, 500)
+    this.chooseDrug = this.chooseDrug.bind(this)
   }
-  fetchCIMA = () => {
-    const ENDPOINT = `https://cima.aemps.es/cima/rest/medicamentos?nombre=${this.state.drug1}`;
-    fetch(ENDPOINT)
-  .then(response => response.json())
-  .then(data => this.getData(data.resultados))
-  }
-  getData (data) {
-    console.log(data[0].nombre)
-    const suggestionArray = []
-    for (let item of data){
-       suggestionArray.push(item.nombre)
+  fetchDataBase = async() => {
+    const response = await fetch('./data/interactions.json')
+    const json = await response.json();
+    this.getInfo(json.interactions)
+  } 
+  getInfo(interactions){
+    for (const item of interactions){
+      if (this.state.drug1===item.ingredient){
+        const selectedElement = item
+        const ingredients = selectedElement.affected_ingredient
+        for (const elem of ingredients){
+          if (this.state.drug2===elem.name){
+            this.setState({
+              result: elem.severity,
+              details: elem.description
+            })
+            break;
+          } else {
+            this.setState({
+              result: 'no hay info',
+              details: 'no hay info'
+            })
+          }
+        }
+      }
     }
-    console.log(suggestionArray)
-    this.setState({
-      suggestion: suggestionArray
-    })
   }
   onSubmitHandler = event => {
     event.preventDefault();
+    this.fetchDataBase()
   }
-  getInputValue = event => {
+  async getInputValue (event) {
     let name = event.target.name;
     let value = event.target.value;
     this.setState({
       [name]: value
     })
-    console.log(this.state.drug1)
-    console.log(this.state.drug2)
+    if (name==='query1'){
+      this.getFirstComponent()
+    }
+    if (name==='query2'){
+      this.getSecondComponent()
+    }
   }
-  onClickHandler = event => {
-    this.fetchCIMA()
+   async getFirstComponent () {
+    const drug1 = await fetchCIMA(this.state.query1)
+      if (this.checkResults(drug1) && this.state.query1){
+        let suggestionsDrug1 = []
+        console.log(drug1)
+        for(let i = 0; i<drug1.resultados.length; i++){
+          suggestionsDrug1.push(drug1.resultados[i].nombre)
+        }
+      this.setState({
+        suggestionsDrug1: suggestionsDrug1
+      })
+    }
+  }
+  async getSecondComponent () {
+    const drug2 = await fetchCIMA(this.state.query2)
+      if (this.checkResults(drug2)){
+      this.setState({
+        drug2: drug2.resultados[0].vtm.nombre
+      })
+    }
+  }
+  debounce (fn, time){
+    let timeOutId
+    return function(){
+      if(timeOutId){
+        clearTimeout(timeOutId)
+      }
+      const context = this
+      const args = arguments
+      timeOutId = setTimeout(() => {
+        fn.apply(context, args)
+      }, time)
+    }
+  }
+  checkResults(res){
+    if (!res.resultados[0]){
+      this.setState({
+        drug1: '',
+        drug2: '',
+        result: '',
+        details: ''
+      })
+      return false;
+    } else {
+      return true
+    }
+  }
+  fetchCIMA(id){
+    fetchCIMA(id)
+    .then(data => {
+      return data.resultados[0].vtm.nombre
+    })
+  }
+  showDetails () {
+    this.setState(prevState => {
+      return {
+        detailsAreHidden: !prevState.detailsAreHidden
+      }
+    })
+  }
+  chooseDrug(name, value){
+
   }
   render() {
+    console.log(this.state.drug1);
+    console.log(this.state.drug2);
     return (
       <React.Fragment>
         <header></header>
         <main className='main'>
           <form className='form' onSubmit={this.onSubmitHandler}>
-            <label>Introduzca los nombres de los medicamentos</label>
+            <label className='label'>Introduzca los nombres de los medicamentos</label>
             <input
             className='input'
             type='text'
-            name='drug1'
-            value={this.state.drug1}
+            name='query1'
+            value={this.state.query1}
             onChange={this.getInputValue}
             />
+            {this.state.suggestionsDrug1.length>0 ? <Autocomplete suggestionsDrug = {this.state.suggestionsDrug1} name='drug1' chooseDrug={this.chooseDrug}/> : null}
             <input
             className='input'
             type='text'
-            name='drug2'
-            value={this.state.drug2}
+            name='query2'
+            value={this.state.query2}
             onChange={this.getInputValue}
             />
+            <Autocomplete/>
             <button
-            type='submit'
-            onClick={this.onClickHandler}>
-              Comparar
+            className='btn'
+            type='submit'>
+              Buscar
             </button>
           </form>
-          <section>
-            <p>{this.state.result}</p>
-          </section>
+          {this.state.result ? 
+          <Result result={this.state.result}
+          drug1={this.state.drug1}
+          drug2={this.state.drug2}
+          details={this.state.details}
+          showDetails={this.showDetails}
+          detailsAreHidden={this.state.detailsAreHidden}
+          /> : null}
         </main>
         <footer></footer>
       </React.Fragment>

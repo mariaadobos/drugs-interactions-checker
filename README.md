@@ -3,7 +3,7 @@
 ## Objetivos personales
 
 Mis objetivos personales con este proyecto son:
-* Mejorar mis conocimientos de JavaScript
+* Mejorar mis conocimientos de JavaScript y React
     * Realización de llamadas a dos APIs.
     * Realizar una interfaz de usuario dinámica.
 
@@ -18,3 +18,4 @@ Por ahora las aplicaciónes que ofrecen contenido similar suelen centarse en enf
 
 ## Fases del proyecto
 * [Fase 1](https://github.com/mariaadobos/personal-project/blob/master/FASE-1.md)
+* [Fase 2](https://github.com/mariaadobos/personal-project/blob/master/FASE-2.md)

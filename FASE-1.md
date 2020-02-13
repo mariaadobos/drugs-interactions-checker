@@ -6,7 +6,7 @@
 
 * recoger los datos introducidos por el usuario
 * a través de la API de CIMA convertir los nombres comerciales a principios activos correspondientes
-* realizar la búsqueda de interracciones entre los principios activos usando la API de DrugBank/Drugle/Vidal
+* realizar la búsqueda de interracciones entre los principios activos usando la API de DrugBank/Vidal o mi JSON
 * pintar el resultado de la búsqueda
 
 ### Requisitos técnicos
@@ -23,7 +23,3 @@ Voy a necesitar:
 ## 3. Planificación
 
 Tareas de la fase 1: <https://github.com/mariaadobos/personal-project/projects/1>
-
-## 4. Desarrolla
-
-## 5. Feedback y valoración
