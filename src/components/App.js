@@ -136,6 +136,8 @@ class App extends React.Component {
   render() {
     console.log(this.state.drug1);
     console.log(this.state.drug2);
+    console.log(this.state.suggestionsDrug1);
+    
     return (
       <React.Fragment>
         <header></header>
