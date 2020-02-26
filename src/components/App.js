@@ -18,126 +18,41 @@ class App extends React.Component {
       details: '',
       detailsAreHidden: true
     }
-    this.onSubmitHandler = this.onSubmitHandler.bind(this);
+    this.getSuggestions = this.getSuggestions.bind(this);
     this.getInputValue = this.getInputValue.bind(this);
-    this.fetchDataBase = this.fetchDataBase.bind(this);
-    this.showDetails = this.showDetails.bind(this);
-    this.getFirstComponent = this.debounce(this.getFirstComponent, 500)
-    this.getSecondComponent = this.debounce(this.getSecondComponent, 500)
-    this.chooseDrug = this.chooseDrug.bind(this)
+    this.selectAnOption = this.selectAnOption.bind(this);
   }
-  fetchDataBase = async() => {
-    const response = await fetch('./data/interactions.json')
-    const json = await response.json();
-    this.getInfo(json.interactions)
-  } 
-  getInfo(interactions){
-    for (const item of interactions){
-      if (this.state.drug1===item.ingredient){
-        const selectedElement = item
-        const ingredients = selectedElement.affected_ingredient
-        for (const elem of ingredients){
-          if (this.state.drug2===elem.name){
-            this.setState({
-              result: elem.severity,
-              details: elem.description
-            })
-            break;
-          } else {
-            this.setState({
-              result: 'no hay info',
-              details: 'no hay info'
-            })
-          }
-        }
-      }
-    }
-  }
-  onSubmitHandler = event => {
-    event.preventDefault();
-    this.fetchDataBase()
-  }
-  async getInputValue (event) {
+  
+  getInputValue(event){
     let name = event.target.name;
     let value = event.target.value;
     this.setState({
       [name]: value
     })
+    fetchCIMA(value)
+    .then(data => this.getSuggestions(name, data.resultados))
+  }
+  getSuggestions(name, data){
+    let suggestions = []
+    for(let i = 0; i<data.length; i++){
+      suggestions.push(data[i].nombre)
+    }
     if (name==='query1'){
-      this.getFirstComponent()
-    }
-    if (name==='query2'){
-      this.getSecondComponent()
-    }
-  }
-   async getFirstComponent () {
-    const drug1 = await fetchCIMA(this.state.query1)
-      if (this.checkResults(drug1) && this.state.query1){
-        let suggestionsDrug1 = []
-        console.log(drug1)
-        for(let i = 0; i<drug1.resultados.length; i++){
-          suggestionsDrug1.push(drug1.resultados[i].nombre)
-        }
-      this.setState({
-        suggestionsDrug1: suggestionsDrug1
-      })
-    }
-  }
-  async getSecondComponent () {
-    const drug2 = await fetchCIMA(this.state.query2)
-      if (this.checkResults(drug2)){
-      this.setState({
-        drug2: drug2.resultados[0].vtm.nombre
-      })
-    }
-  }
-  debounce (fn, time){
-    let timeOutId
-    return function(){
-      if(timeOutId){
-        clearTimeout(timeOutId)
-      }
-      const context = this
-      const args = arguments
-      timeOutId = setTimeout(() => {
-        fn.apply(context, args)
-      }, time)
-    }
-  }
-  checkResults(res){
-    if (!res.resultados[0]){
-      this.setState({
-        drug1: '',
-        drug2: '',
-        result: '',
-        details: ''
-      })
-      return false;
+      this.setState({suggestionsDrug1: suggestions})
     } else {
-      return true
+      this.setState({suggestionsDrug2: suggestions})
     }
   }
-  fetchCIMA(id){
-    fetchCIMA(id)
-    .then(data => {
-      return data.resultados[0].vtm.nombre
-    })
-  }
-  showDetails () {
-    this.setState(prevState => {
-      return {
-        detailsAreHidden: !prevState.detailsAreHidden
-      }
-    })
-  }
-  chooseDrug(name, value){
-
+  selectAnOption(field, value){
+    field==='query1' ? this.setState({query1: value, suggestionsDrug1: []}) : this.setState({query2: value, suggestionsDrug2: []});
   }
   render() {
-    console.log(this.state.drug1);
-    console.log(this.state.drug2);
+    const {suggestionsDrug1, suggestionsDrug2} = this.state;
+    console.log(this.state.query1);
+    console.log(this.state.query2);
     console.log(this.state.suggestionsDrug1);
-    
+    console.log(this.state.suggestionsDrug2);
+
     return (
       <React.Fragment>
         <header></header>
@@ -151,7 +66,9 @@ class App extends React.Component {
             value={this.state.query1}
             onChange={this.getInputValue}
             />
-            {this.state.suggestionsDrug1.length>0 ? <Autocomplete suggestionsDrug = {this.state.suggestionsDrug1} name='drug1' chooseDrug={this.chooseDrug}/> : null}
+            {suggestionsDrug1.length>0 ? 
+            <Autocomplete suggestionsDrug = {this.state.suggestionsDrug1} name='query1' selectAnOption={this.selectAnOption}/>
+            : null}
             <input
             className='input'
             type='text'
@@ -159,7 +76,9 @@ class App extends React.Component {
             value={this.state.query2}
             onChange={this.getInputValue}
             />
-            <Autocomplete/>
+            {suggestionsDrug2.length>0 ? 
+            <Autocomplete suggestionsDrug = {this.state.suggestionsDrug2} name='query2' selectAnOption={this.selectAnOption}/> 
+            : null}
             <button
             className='btn'
             type='submit'>
