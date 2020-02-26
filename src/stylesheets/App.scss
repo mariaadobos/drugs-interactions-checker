@@ -33,7 +33,7 @@
 }
 .input{
     min-width: 250px;
-    width: 25%;
+    width: 30%;
     height: 40px;
     //border-radius: 20px;
     border: 2px solid #d9baa4;
@@ -87,7 +87,6 @@
     &__details{
         font-size: 18px;
         @media all and (min-width: 768px){
-            width: 50%;
             font-size: 22px;
         }
     }
@@ -97,7 +96,7 @@
 }
 .autocomplete{
     min-width: 250px;
-    width: 25%;
+    width: 30%;
     height: auto;
     max-height: 150px;
     overflow-y: scroll;

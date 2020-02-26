@@ -26,6 +26,7 @@ class App extends React.Component {
     this.getComponent = this.getComponent.bind(this);
     this.callServer = this.callServer.bind(this);
     this.getResults = this.getResults.bind(this);
+    this.showDetails = this.showDetails.bind(this);
   }
   
   getInputValue(event){
@@ -37,7 +38,6 @@ class App extends React.Component {
     this.fetchCIMA(name, value)
   }
   fetchCIMA (name, value){
-    console.log('api llamada')
     fetchCIMA(value)
     .then(data => this.getSuggestions(name, data.resultados))
   }
@@ -108,13 +108,19 @@ class App extends React.Component {
       }
     }
   }
+  showDetails () {
+    this.setState(prevState => {
+      return {
+        detailsAreHidden: !prevState.detailsAreHidden
+      }
+    })
+  }
+
   render() {
-    const {suggestionsDrug1, suggestionsDrug2} = this.state;
+    const {suggestionsDrug1, suggestionsDrug2, result, details, detailsAreHidden} = this.state;
     console.log(this.state.query1);
     console.log(this.state.query2);
     console.log(this.state.drug1);
-    console.log(this.state.drug2);
-
     return (
       <React.Fragment>
         <header></header>
@@ -130,7 +136,7 @@ class App extends React.Component {
             autoComplete="off"
             />
             {suggestionsDrug1.length>0 ? 
-            <Autocomplete suggestionsDrug = {this.state.suggestionsDrug1} name='query1' selectAnOption={this.selectAnOption}/>
+            <Autocomplete suggestionsDrug = {suggestionsDrug1} name='query1' selectAnOption={this.selectAnOption}/>
             : null}
             <input
             className='input'
@@ -141,7 +147,7 @@ class App extends React.Component {
             autoComplete="off"
             />
             {suggestionsDrug2.length>0 ? 
-            <Autocomplete suggestionsDrug = {this.state.suggestionsDrug2} name='query2' selectAnOption={this.selectAnOption}/> 
+            <Autocomplete suggestionsDrug = {suggestionsDrug2} name='query2' selectAnOption={this.selectAnOption}/> 
             : null}
             <button
             className='btn'
@@ -149,13 +155,13 @@ class App extends React.Component {
               Buscar
             </button>
           </form>
-          {this.state.result ? 
-          <Result result={this.state.result}
+          {result ? 
+          <Result result={result}
           drug1={this.state.drug1}
           drug2={this.state.drug2}
-          details={this.state.details}
+          details={details}
           showDetails={this.showDetails}
-          detailsAreHidden={this.state.detailsAreHidden}
+          detailsAreHidden={detailsAreHidden}
           /> : null}
         </main>
         <footer></footer>
