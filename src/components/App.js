@@ -24,6 +24,8 @@ class App extends React.Component {
     this.selectAnOption = this.selectAnOption.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.getComponent = this.getComponent.bind(this);
+    this.callServer = this.callServer.bind(this);
+    this.getResults = this.getResults.bind(this);
   }
   
   getInputValue(event){
@@ -77,6 +79,34 @@ class App extends React.Component {
       drug1: drug1,
       drug2: drug2
     })
+    this.callServer()
+  }
+  callServer(){
+    fetch('./data/interactions.json')
+    .then(response => response.json())
+    .then(data => this.getResults(data.interactions))
+  }
+  getResults(data){
+    for (const item of data){
+      if (item.ingredient === this.state.drug1){
+        let selectedComponent = item;
+        let affectedComponents = selectedComponent.affected_ingredient;
+        for (const comp of affectedComponents){
+          if(comp.name === this.state.drug2){
+            this.setState({
+              result: comp.severity,
+              details: comp.description
+            })
+            break;
+          } else {
+            this.setState({
+              result: 'no hay info',
+              details: 'no hay info'
+            })
+          }
+        }
+      }
+    }
   }
   render() {
     const {suggestionsDrug1, suggestionsDrug2} = this.state;
