@@ -20,7 +20,10 @@ class App extends React.Component {
     }
     this.getSuggestions = this.getSuggestions.bind(this);
     this.getInputValue = this.getInputValue.bind(this);
+    this.fetchCIMA = this.debounce(this.fetchCIMA, 500);
     this.selectAnOption = this.selectAnOption.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.getComponent = this.getComponent.bind(this);
   }
   
   getInputValue(event){
@@ -29,8 +32,25 @@ class App extends React.Component {
     this.setState({
       [name]: value
     })
+    this.fetchCIMA(name, value)
+  }
+  fetchCIMA (name, value){
+    console.log('api llamada')
     fetchCIMA(value)
     .then(data => this.getSuggestions(name, data.resultados))
+  }
+  debounce (fn, time){
+    let timeOutId
+    return function(){
+      if(timeOutId){
+        clearTimeout(timeOutId)
+      }
+      const context = this
+      const args = arguments
+      timeOutId = setTimeout(() => {
+        fn.apply(context, args)
+      }, time)
+    }
   }
   getSuggestions(name, data){
     let suggestions = []
@@ -46,18 +66,30 @@ class App extends React.Component {
   selectAnOption(field, value){
     field==='query1' ? this.setState({query1: value, suggestionsDrug1: []}) : this.setState({query2: value, suggestionsDrug2: []});
   }
+  onSubmit = ev => {
+    ev.preventDefault();
+    this.getComponent()
+  }
+  async getComponent() {
+    let drug1 = await fetchCIMA(this.state.query1).then(data => data.resultados[0].vtm.nombre);
+    let drug2 = await fetchCIMA(this.state.query2).then(data => {return data.resultados[0].vtm.nombre});
+    this.setState({
+      drug1: drug1,
+      drug2: drug2
+    })
+  }
   render() {
     const {suggestionsDrug1, suggestionsDrug2} = this.state;
     console.log(this.state.query1);
     console.log(this.state.query2);
-    console.log(this.state.suggestionsDrug1);
-    console.log(this.state.suggestionsDrug2);
+    console.log(this.state.drug1);
+    console.log(this.state.drug2);
 
     return (
       <React.Fragment>
         <header></header>
         <main className='main'>
-          <form className='form' onSubmit={this.onSubmitHandler}>
+          <form className='form' onSubmit={this.onSubmit}>
             <label className='label'>Introduzca los nombres de los medicamentos</label>
             <input
             className='input'
@@ -65,6 +97,7 @@ class App extends React.Component {
             name='query1'
             value={this.state.query1}
             onChange={this.getInputValue}
+            autoComplete="off"
             />
             {suggestionsDrug1.length>0 ? 
             <Autocomplete suggestionsDrug = {this.state.suggestionsDrug1} name='query1' selectAnOption={this.selectAnOption}/>
@@ -75,6 +108,7 @@ class App extends React.Component {
             name='query2'
             value={this.state.query2}
             onChange={this.getInputValue}
+            autoComplete="off"
             />
             {suggestionsDrug2.length>0 ? 
             <Autocomplete suggestionsDrug = {this.state.suggestionsDrug2} name='query2' selectAnOption={this.selectAnOption}/> 
